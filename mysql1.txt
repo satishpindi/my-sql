@@ -1,0 +1,145 @@
+create database information;
+use information;
+CREATE TABLE `information`.`department` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(45) NULL,
+`location` VARCHAR(45) NULL,
+PRIMARY KEY (`id`));
+select * from department;
+insert into department (id,name,location) values(1,'Information-Technology','Hyderabad');
+insert into department(name,location) values('computer science','ongole');
+insert into department(name,location) values('Electronics','Khammam');
+insert into department values(4,'Management','narsapur');
+insert into department values(5,'Finance','delhi');
+insert into department values(6,'Economics','up');
+insert into department values(7,'social','MP');
+insert into department values(8,'Mechanical','rangareddy');
+insert into department values(9,'Surgical','vijayawada');
+insert into department values(10,'statistics','guntur');
+insert into department values(11,'mathematics','nizamabad');
+
+
+
+CREATE TABLE `information`.`employee` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`name` varchar(256) NOT NULL,
+`phone_number` varchar(45) DEFAULT NULL,
+`age` int(11) DEFAULT NULL,
+`email` varchar(100) DEFAULT NULL,
+`gender` enum('M','F') NOT NULL,
+`department_id` int(11) DEFAULT NULL,
+PRIMARY KEY (`id`),
+CONSTRAINT `dept` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+select * from employee;
+insert into employee (id,name,phone_number,age,email,gender,department_id) values(90,'satish',965270,21,'satish@123','m',10);
+insert into employee(name,phone_number,age,email,gender,department_id) values('surya',986611,23,'surya@33','m',7);
+insert into employee values(92,'vamsi',92931,23,'vamsi@3344','m',3);
+insert into employee values(93,'ravali',343434,30,'ravali@43','f',4);
+insert into employee values(94,'supriya',12134,25,'supriya@90','f',5);
+insert into employee values(95,'trilochan',595959,50,'Trillu@80','m',2);
+insert into employee values(96,'shanti',494949,22,'shanti@50','f',8);
+insert into employee values(97,'kaveri',9999,23,'kaveri@10','f',1); 
+insert into employee values(98,'ramu',898989,24,'ramu@45','m',9);
+insert into employee values(99,'somu',00345,30,'somu@34','m',6);
+insert into employee values(100,'phanikumar',339393,90,'phani@44','m',11);
+
+
+
+
+
+CREATE TABLE `information`.`product` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`name` VARCHAR(45) NULL,
+`price` DOUBLE NULL,
+`department_id` INT NULL,
+PRIMARY KEY (`id`),
+INDEX `dep_idx` (`department_id` ASC),
+CONSTRAINT `dep`
+FOREIGN KEY (`department_id`)
+REFERENCES `information`.`department` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION);
+select * from product;
+insert into  product (id,name,price,department_id) values(250,'chicken',200,11);
+insert into product(name,price,department_id) values('carrot',50,2);
+insert into product values(252,'onion',100,6);
+insert into product values(253,'apple',500,4);
+insert into product values(254,'brinjal',40,8);
+insert into product values(255,'apple',600,3);
+insert into product values(256,'potato',90,1);
+insert into product values(257,'apple',200,5);
+insert into product values(258,'mango',100,7);
+insert into product values(259,'chips',300,10);
+insert into product values(260,'roses',450,9);
+
+
+
+
+CREATE TABLE `information`.`sales` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`product_id` INT NULL,
+`customer_name` VARCHAR(45) NULL,
+`quantity` INT NULL,
+PRIMARY KEY (`id`),
+INDEX `prod_idx` (`product_id` ASC),
+CONSTRAINT `prod`
+FOREIGN KEY (`product_id`)
+REFERENCES `information`.`department` (`id`)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION);
+select * from sales;
+insert into sales (id,product_id,customer_name,quantity) values(350,2,'ravi',400);
+insert into sales(product_id,customer_name,quantity) values(8,'rahul',300);
+insert into sales values(352,11,'rani',340);
+insert into sales values(353,9,'vamsi',800);
+insert into sales values(354,1,'susheel',780);
+insert into sales values(355,10,'mahindra',1000);
+insert into sales values(356,3,'ranjini',500);
+insert into sales values(357,4,'varma',250);
+insert into sales values(358,5,'manooj',900);
+insert into sales values(359,7,'venkat',680);
+insert into sales values(360,6,'sukanya',880);
+select price from product;
+select price from product where id=254;
+select name,price from product where id=260;
+select name,price from product where department_id=10;
+select name,age from employee order by age desc limit 10;
+
+
+select product.name,sum(sales.quantity)
+from product  inner join sales on product.id=sales.product_id
+
+group by product.name
+
+order by sum(sales.quantity) desc
+
+limit 5;
+
+
+select employee.name
+from employee inner join department on department.id=employee.department_id
+
+where location="hyderabad";
+
+
+select department.name,count(employee.id) 
+from department inner join employee on department.id=employee.department_id
+
+group by department.name
+
+having count(employee.id)>2;
+
+
+
+select sales.customer_name,(sales.quantity*product.price)
+from product inner join sales on product.id=sales.product_id
+
+group by sales.customer_name;
+select distinct  customer_name from sales;
+
+
+select name from employee where email is null;
+
+select name from employee where department_id =1 or department_id=2;
+
